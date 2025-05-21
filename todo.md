@@ -7,3 +7,4 @@
 - [x] Implement responsive full-screen scaling
 - [ ] Expand info panels with more details
 - [ ] Add sprite graphics and animations for the character
+- [ ] Set up build and type-check scripts (npm run build, npm run typecheck)
