@@ -3,6 +3,8 @@ import * as PIXI from 'pixi.js';
 
 const MOVE_SPEED = 2;
 const HEIGHT_MULTIPLIER = 2.4;
+const FLAG_WIDTH = 10;
+const FLAG_HEIGHT = 60;
 
 const PlatformerCanvas: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,6 +31,8 @@ const PlatformerCanvas: React.FC = () => {
 
     const grounds: PIXI.Graphics[] = [];
     const ladders: PIXI.Graphics[] = [];
+    const flag = new PIXI.Graphics();
+    let flagX = 40;
 
     const computeLayout = () => {
       const h = window.innerHeight;
@@ -70,9 +74,19 @@ const PlatformerCanvas: React.FC = () => {
         l.drawRect(ladderXs[i], groundYs[i], ladderWidth, groundYs[i + 1] - groundYs[i]);
         l.endFill();
       }
+
+      flag.clear();
+      flag.beginFill(0xffffff);
+      flag.drawRect(0, -FLAG_HEIGHT, FLAG_WIDTH, FLAG_HEIGHT);
+      flag.beginFill(0xffdd00);
+      flag.drawRect(FLAG_WIDTH, -FLAG_HEIGHT, FLAG_WIDTH * 2, FLAG_WIDTH);
+      flag.endFill();
+      flag.x = flagX;
+      flag.y = groundYs[groundYs.length - 1];
     };
 
     drawScene();
+    app.stage.addChild(flag);
 
     const player = new PIXI.Graphics();
     player.beginFill(0xff0000);
@@ -82,15 +96,24 @@ const PlatformerCanvas: React.FC = () => {
     player.y = groundYs[0] - playerSize;
     app.stage.addChild(player);
 
-    type Mode = 'walking' | 'climbing';
+    type Mode = 'walking' | 'climbing' | 'celebrating';
     let mode: Mode = 'walking';
     let direction: 'right' | 'left' = 'right';
     let currentLadder: number | null = null;
     let currentGround = 0;
+    let jumpCounter = 0;
 
     app.ticker.add(() => {
       if (mode === 'walking') {
-        if (direction === 'right') {
+        if (
+          currentGround === groundYs.length - 1 &&
+          direction === 'left' &&
+          player.x <= flagX + FLAG_WIDTH * 3
+        ) {
+          player.x = flagX + FLAG_WIDTH * 3;
+          mode = 'celebrating';
+          jumpCounter = 0;
+        } else if (direction === 'right') {
           player.x += MOVE_SPEED;
           if (
             ladderDirs[currentGround] === 'right' &&
@@ -120,7 +143,8 @@ const PlatformerCanvas: React.FC = () => {
             player.y = endY - playerSize;
             mode = 'walking';
             currentGround += 1;
-            direction = ladderDirs[currentLadder!] === 'right' ? 'left' : 'right';
+            direction =
+              ladderDirs[currentLadder!] === 'right' ? 'left' : 'right';
             currentLadder = null;
           }
         } else {
@@ -129,10 +153,17 @@ const PlatformerCanvas: React.FC = () => {
             player.y = endY - playerSize;
             mode = 'walking';
             currentGround += 1;
-            direction = ladderDirs[currentLadder!] === 'right' ? 'left' : 'right';
+            direction =
+              ladderDirs[currentLadder!] === 'right' ? 'left' : 'right';
             currentLadder = null;
           }
         }
+      } else if (mode === 'celebrating') {
+        jumpCounter += 0.1;
+        player.y =
+          groundYs[currentGround] -
+          playerSize -
+          Math.abs(Math.sin(jumpCounter)) * 20;
       }
     });
 
@@ -143,6 +174,10 @@ const PlatformerCanvas: React.FC = () => {
         player.y = groundYs[currentGround] - playerSize;
       } else if (mode === 'climbing' && currentLadder !== null) {
         player.x = ladderXs[currentLadder];
+      } else if (mode === 'celebrating') {
+        player.x = flagX + FLAG_WIDTH * 3;
+        player.y =
+          groundYs[currentGround] - playerSize - Math.abs(Math.sin(jumpCounter)) * 20;
       }
     };
 
