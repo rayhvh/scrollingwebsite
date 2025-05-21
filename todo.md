@@ -8,4 +8,6 @@
 - [x] Add second ladder and bottom path movement
 - [ ] Expand info panels with more details
 - [ ] Add sprite graphics and animations for the character
-- [ ] Set up build and type-check scripts (npm run build, npm run typecheck)
+- [x] Set up build and type-check scripts (npm run build, npm run typecheck)
+
+- [x] Configure environment setup script to install dependencies
