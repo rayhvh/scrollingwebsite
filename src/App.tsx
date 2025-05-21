@@ -5,7 +5,7 @@ import ScrollSyncManager from './components/ScrollSyncManager';
 
 const App: React.FC = () => {
   return (
-    <div className="w-screen h-screen overflow-hidden">
+    <div className="w-screen min-h-screen overflow-y-auto">
       <ScrollSyncManager>
         <PlatformerCanvas />
         <InfoPanels />
