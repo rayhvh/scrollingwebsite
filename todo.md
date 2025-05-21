@@ -1,5 +1,7 @@
+- **Website concept**: This site mixes a scrolling webpage with a small platformer where a character automatically walks through the level. Readers control only the scroll to keep the hero on screen.
 - [x] Add initial informational content to the page
-- [ ] Implement basic platformer character and movement
+- [x] Implement basic platformer character and movement
 - [ ] Synchronize scrolling with the character's position
 - [ ] Add obstacles such as jumps and ladders
 - [ ] Expand info panels with more details
+- [ ] Add sprite graphics and animations for the character
