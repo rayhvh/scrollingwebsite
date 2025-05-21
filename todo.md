@@ -5,6 +5,7 @@
 - [x] Add obstacles such as jumps and ladders
 - [ ] Add jumping obstacles
 - [x] Implement responsive full-screen scaling
+- [x] Add second ladder and bottom path movement
 - [ ] Expand info panels with more details
 - [ ] Add sprite graphics and animations for the character
 - [ ] Set up build and type-check scripts (npm run build, npm run typecheck)

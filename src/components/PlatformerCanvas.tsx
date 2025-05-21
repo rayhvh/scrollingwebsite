@@ -24,10 +24,12 @@ const PlatformerCanvas: React.FC = () => {
     let topGroundY = app.screen.height * 0.4;
     let bottomGroundY = app.screen.height * 0.9;
     let ladderX = app.screen.width - ladderWidth * 2;
+    let nextLadderX = app.screen.width / 3;
 
     const topGround = new PIXI.Graphics();
     const bottomGround = new PIXI.Graphics();
     const ladder = new PIXI.Graphics();
+    const nextLadder = new PIXI.Graphics();
 
     const drawScene = () => {
       topGround.clear();
@@ -44,6 +46,11 @@ const PlatformerCanvas: React.FC = () => {
       ladder.beginFill(0x888888);
       ladder.drawRect(ladderX, topGroundY, ladderWidth, bottomGroundY - topGroundY);
       ladder.endFill();
+
+      nextLadder.clear();
+      nextLadder.beginFill(0x888888);
+      nextLadder.drawRect(nextLadderX, bottomGroundY, ladderWidth, app.screen.height - bottomGroundY);
+      nextLadder.endFill();
     };
 
     drawScene();
@@ -51,6 +58,7 @@ const PlatformerCanvas: React.FC = () => {
     app.stage.addChild(topGround);
     app.stage.addChild(bottomGround);
     app.stage.addChild(ladder);
+    app.stage.addChild(nextLadder);
 
     const player = new PIXI.Graphics();
     player.beginFill(0xff0000);
@@ -60,20 +68,45 @@ const PlatformerCanvas: React.FC = () => {
     player.y = topGroundY - playerSize;
     app.stage.addChild(player);
 
-    let mode: 'walking' | 'climbing' | 'idle' = 'walking';
+    type Mode = 'walking' | 'climbing';
+    let mode: Mode = 'walking';
+    let direction: 'right' | 'left' = 'right';
+    let currentLadder: 'first' | 'second' | null = null;
 
     app.ticker.add(() => {
       if (mode === 'walking') {
-        player.x += MOVE_SPEED;
-        if (player.x + playerSize >= ladderX) {
-          mode = 'climbing';
-          player.x = ladderX;
+        if (direction === 'right') {
+          player.x += MOVE_SPEED;
+          if (player.x + playerSize >= ladderX) {
+            mode = 'climbing';
+            currentLadder = 'first';
+            player.x = ladderX;
+          }
+        } else {
+          player.x -= MOVE_SPEED;
+          if (player.x <= nextLadderX) {
+            mode = 'climbing';
+            currentLadder = 'second';
+            player.x = nextLadderX;
+          }
         }
       } else if (mode === 'climbing') {
-        player.y += MOVE_SPEED;
-        if (player.y >= bottomGroundY - playerSize) {
-          player.y = bottomGroundY - playerSize;
-          mode = 'idle';
+        if (currentLadder === 'first') {
+          player.y += MOVE_SPEED;
+          if (player.y >= bottomGroundY - playerSize) {
+            player.y = bottomGroundY - playerSize;
+            mode = 'walking';
+            direction = 'left';
+            currentLadder = null;
+          }
+        } else if (currentLadder === 'second') {
+          player.y -= MOVE_SPEED;
+          if (player.y <= topGroundY - playerSize) {
+            player.y = topGroundY - playerSize;
+            mode = 'walking';
+            direction = 'right';
+            currentLadder = null;
+          }
         }
       }
     });
@@ -82,13 +115,20 @@ const PlatformerCanvas: React.FC = () => {
       topGroundY = app.screen.height * 0.4;
       bottomGroundY = app.screen.height * 0.9;
       ladderX = app.screen.width - ladderWidth * 2;
+      nextLadderX = app.screen.width / 3;
       drawScene();
       if (mode === 'walking') {
-        player.y = topGroundY - playerSize;
+        if (direction === 'right') {
+          player.y = topGroundY - playerSize;
+        } else {
+          player.y = bottomGroundY - playerSize;
+        }
       } else if (mode === 'climbing') {
-        player.x = ladderX;
-      } else if (mode === 'idle') {
-        player.y = bottomGroundY - playerSize;
+        if (currentLadder === 'first') {
+          player.x = ladderX;
+        } else if (currentLadder === 'second') {
+          player.x = nextLadderX;
+        }
       }
     };
 
