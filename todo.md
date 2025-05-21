@@ -10,6 +10,7 @@
 - [x] Add third and fourth ladders to continue level
 - [x] Add flag pole at end of level with celebration animation
 - [x] Increase player movement speed
+- [x] Scale player speed with screen width
 - [x] Add additional staircases to extend the level
 - [x] Shorten inaccessible platforms behind ladders
 - [x] Ensure ladder sequence forms a complete path to the flag

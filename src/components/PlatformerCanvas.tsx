@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import * as PIXI from 'pixi.js';
 
-const MOVE_SPEED = 4;
+const BASE_MOVE_SPEED = 4;
+const BASE_WIDTH = 1280;
 const HEIGHT_MULTIPLIER = 2.4;
 const FLAG_WIDTH = 10;
 const FLAG_HEIGHT = 60;
@@ -18,6 +19,10 @@ const PlatformerCanvas: React.FC = () => {
       background: '#000000',
       antialias: true,
     });
+
+    let horizontalSpeed =
+      BASE_MOVE_SPEED * (app.screen.width / BASE_WIDTH);
+    const verticalSpeed = BASE_MOVE_SPEED;
 
     containerRef.current.appendChild(app.view as HTMLCanvasElement);
 
@@ -59,7 +64,12 @@ const PlatformerCanvas: React.FC = () => {
       ladderXs[4] = app.screen.width * 0.65 - ladderWidth;
     };
 
+    const updateSpeeds = () => {
+      horizontalSpeed = BASE_MOVE_SPEED * (app.screen.width / BASE_WIDTH);
+    };
+
     computeLayout();
+    updateSpeeds();
 
     for (let i = 0; i < NUM_GROUNDS; i++) {
       grounds[i] = new PIXI.Graphics();
@@ -138,7 +148,7 @@ const PlatformerCanvas: React.FC = () => {
           mode = 'celebrating';
           jumpCounter = 0;
         } else if (direction === 'right') {
-          player.x += MOVE_SPEED;
+          player.x += horizontalSpeed;
           if (
             currentGround < NUM_LADDERS &&
             ladderDirs[currentGround] === 'right' &&
@@ -149,7 +159,7 @@ const PlatformerCanvas: React.FC = () => {
             player.x = ladderXs[currentGround];
           }
         } else {
-          player.x -= MOVE_SPEED;
+          player.x -= horizontalSpeed;
           if (
             currentGround < NUM_LADDERS &&
             ladderDirs[currentGround] === 'left' &&
@@ -164,7 +174,7 @@ const PlatformerCanvas: React.FC = () => {
         const startY = groundYs[currentLadder!];
         const endY = groundYs[currentLadder! + 1];
         if (endY > startY) {
-          player.y += MOVE_SPEED;
+          player.y += verticalSpeed;
           if (player.y >= endY - playerSize) {
             player.y = endY - playerSize;
             mode = 'walking';
@@ -174,7 +184,7 @@ const PlatformerCanvas: React.FC = () => {
             currentLadder = null;
           }
         } else {
-          player.y -= MOVE_SPEED;
+          player.y -= verticalSpeed;
           if (player.y <= endY - playerSize) {
             player.y = endY - playerSize;
             mode = 'walking';
@@ -196,6 +206,7 @@ const PlatformerCanvas: React.FC = () => {
     const resize = () => {
       app.renderer.resize(window.innerWidth, window.innerHeight * HEIGHT_MULTIPLIER);
       drawScene();
+      updateSpeeds();
       if (mode === 'walking') {
         player.y = groundYs[currentGround] - playerSize;
       } else if (mode === 'climbing' && currentLadder !== null) {
