@@ -8,6 +8,8 @@
 - [x] Add second ladder and bottom path movement
 - [x] Fix second ladder downward movement and extend canvas
 - [x] Add third and fourth ladders to continue level
+- [x] Increase player movement speed
+- [x] Add additional staircases to extend the level
 - [ ] Expand info panels with more details
 - [ ] Add sprite graphics and animations for the character
 - [x] Set up build and type-check scripts (npm run build, npm run typecheck)

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as PIXI from 'pixi.js';
 
-const MOVE_SPEED = 2;
+const MOVE_SPEED = 4;
 const HEIGHT_MULTIPLIER = 2.4;
 
 const PlatformerCanvas: React.FC = () => {
@@ -23,9 +23,17 @@ const PlatformerCanvas: React.FC = () => {
     const groundThickness = 10;
     const ladderWidth = 20;
 
+    const NUM_LADDERS = 5;
+    const NUM_GROUNDS = NUM_LADDERS + 1;
     const groundYs: number[] = [];
     const ladderXs: number[] = [];
-    const ladderDirs: ('right' | 'left')[] = ['right', 'left', 'right'];
+    const ladderDirs: ('right' | 'left')[] = [
+      'right',
+      'left',
+      'right',
+      'right',
+      'left',
+    ];
 
     const grounds: PIXI.Graphics[] = [];
     const ladders: PIXI.Graphics[] = [];
@@ -33,21 +41,24 @@ const PlatformerCanvas: React.FC = () => {
     const computeLayout = () => {
       const h = window.innerHeight;
       groundYs.length = 0;
-      for (let i = 0; i < 4; i++) {
-        groundYs.push(h * (0.4 + i * 0.5));
+      const groundPositions = [0.4, 0.9, 1.3, 1.7, 2.1, 2.4];
+      for (let i = 0; i < NUM_GROUNDS; i++) {
+        groundYs.push(h * groundPositions[i]);
       }
 
       ladderXs[0] = app.screen.width - ladderWidth * 2;
-      ladderXs[1] = app.screen.width / 3;
+      ladderXs[1] = app.screen.width / 2;
       ladderXs[2] = app.screen.width - ladderWidth * 2;
+      ladderXs[3] = app.screen.width - ladderWidth * 2;
+      ladderXs[4] = app.screen.width / 4;
     };
 
     computeLayout();
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < NUM_GROUNDS; i++) {
       grounds[i] = new PIXI.Graphics();
       app.stage.addChild(grounds[i]);
-      if (i < 3) {
+      if (i < NUM_LADDERS) {
         ladders[i] = new PIXI.Graphics();
         app.stage.addChild(ladders[i]);
       }
@@ -93,6 +104,7 @@ const PlatformerCanvas: React.FC = () => {
         if (direction === 'right') {
           player.x += MOVE_SPEED;
           if (
+            currentGround < NUM_LADDERS &&
             ladderDirs[currentGround] === 'right' &&
             player.x + playerSize >= ladderXs[currentGround]
           ) {
@@ -103,6 +115,7 @@ const PlatformerCanvas: React.FC = () => {
         } else {
           player.x -= MOVE_SPEED;
           if (
+            currentGround < NUM_LADDERS &&
             ladderDirs[currentGround] === 'left' &&
             player.x <= ladderXs[currentGround]
           ) {
