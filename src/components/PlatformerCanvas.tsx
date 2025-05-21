@@ -74,7 +74,18 @@ const PlatformerCanvas: React.FC = () => {
         const g = grounds[i];
         g.clear();
         g.beginFill(0x444444);
-        g.drawRect(0, groundYs[i], app.screen.width, groundThickness);
+
+        let startX = 0;
+        let endX = app.screen.width;
+        if (i < NUM_LADDERS) {
+          if (ladderDirs[i] === 'right') {
+            endX = ladderXs[i] + ladderWidth;
+          } else {
+            startX = ladderXs[i];
+          }
+        }
+
+        g.drawRect(startX, groundYs[i], endX - startX, groundThickness);
         g.endFill();
       }
 
