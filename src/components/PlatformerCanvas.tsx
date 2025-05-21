@@ -50,11 +50,13 @@ const PlatformerCanvas: React.FC = () => {
         groundYs.push(h * groundPositions[i]);
       }
 
-      ladderXs[0] = app.screen.width - ladderWidth * 2;
-      ladderXs[1] = app.screen.width / 2;
-      ladderXs[2] = app.screen.width - ladderWidth * 2;
-      ladderXs[3] = app.screen.width - ladderWidth * 2;
-      ladderXs[4] = app.screen.width - ladderWidth * 2;
+      // Stagger ladder positions so each one is offset from the previous
+      // while still alternating sides based on ladderDirs.
+      ladderXs[0] = app.screen.width * 0.85 - ladderWidth;
+      ladderXs[1] = app.screen.width * 0.15;
+      ladderXs[2] = app.screen.width * 0.75 - ladderWidth;
+      ladderXs[3] = app.screen.width * 0.25;
+      ladderXs[4] = app.screen.width * 0.65 - ladderWidth;
     };
 
     computeLayout();
