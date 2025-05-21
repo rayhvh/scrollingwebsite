@@ -6,3 +6,4 @@ This project tracks progress with `todo.md` in the repository root.
 - After completing a task, mark its checkbox with `[x]`.
 - Add new tasks to the list as the project grows.
 - Keep the list up to date so future changes reference it.
+- If a task is large, add additional sub-tasks to `todo.md` when needed.
