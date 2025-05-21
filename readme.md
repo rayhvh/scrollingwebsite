@@ -35,7 +35,8 @@ These choices keep the code lightweight and easy to extend as the platformer gro
    ```bash
    npm install
    ```
-
+**Note**: If Node 22 or later reports a "module is not defined in ES module scope" error when running `npm run dev`, make sure the file `postcss.config.cjs` is present instead of `postcss.config.js`.
+ 
 2. Run the development server:
 
    ```bash
