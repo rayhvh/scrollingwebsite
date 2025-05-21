@@ -4,9 +4,8 @@ import * as PIXI from 'pixi.js';
 const WIDTH = 400;
 const HEIGHT = 200;
 const GROUND_Y = 180;
-const GRAVITY = 0.5;
 const MOVE_SPEED = 2;
-const JUMP_SPEED = -10;
+
 
 const PlatformerCanvas: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,37 +35,13 @@ const PlatformerCanvas: React.FC = () => {
     player.y = GROUND_Y - 20;
     app.stage.addChild(player);
 
-    let vy = 0;
-    const keys: Record<string, boolean> = {};
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      keys[e.code] = true;
-    };
-    const onKeyUp = (e: KeyboardEvent) => {
-      keys[e.code] = false;
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    window.addEventListener('keyup', onKeyUp);
-
     app.ticker.add(() => {
-      if (keys['ArrowLeft']) player.x -= MOVE_SPEED;
-      if (keys['ArrowRight']) player.x += MOVE_SPEED;
-      if (keys['Space'] && player.y >= GROUND_Y - 20) {
-        vy = JUMP_SPEED;
-      }
-
-      vy += GRAVITY;
-      player.y += vy;
-      if (player.y >= GROUND_Y - 20) {
-        player.y = GROUND_Y - 20;
-        vy = 0;
+      player.x += MOVE_SPEED;
+      if (player.x > WIDTH) {
+        player.x = -20; // loop when exiting the screen
       }
     });
-
     return () => {
-      window.removeEventListener('keydown', onKeyDown);
-      window.removeEventListener('keyup', onKeyUp);
       app.destroy(true, { children: true });
     };
   }, []);
