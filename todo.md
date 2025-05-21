@@ -1,5 +1,6 @@
 - [x] Add initial informational content to the page
-- [ ] Implement basic platformer character and movement
+- [x] Implement basic platformer character and movement
 - [ ] Synchronize scrolling with the character's position
 - [ ] Add obstacles such as jumps and ladders
 - [ ] Expand info panels with more details
+- [ ] Add sprite graphics and animations for the character
