@@ -33,8 +33,8 @@ const PlatformerCanvas: React.FC = () => {
       'right',
       'left',
       'right',
-      'right',
       'left',
+      'right',
     ];
 
     const grounds: PIXI.Graphics[] = [];
@@ -54,7 +54,7 @@ const PlatformerCanvas: React.FC = () => {
       ladderXs[1] = app.screen.width / 2;
       ladderXs[2] = app.screen.width - ladderWidth * 2;
       ladderXs[3] = app.screen.width - ladderWidth * 2;
-      ladderXs[4] = app.screen.width / 4;
+      ladderXs[4] = app.screen.width - ladderWidth * 2;
     };
 
     computeLayout();

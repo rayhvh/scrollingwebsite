@@ -12,6 +12,7 @@
 - [x] Increase player movement speed
 - [x] Add additional staircases to extend the level
 - [x] Shorten inaccessible platforms behind ladders
+- [x] Ensure ladder sequence forms a complete path to the flag
 - [ ] Expand info panels with more details
 - [ ] Add sprite graphics and animations for the character
 - [x] Set up build and type-check scripts (npm run build, npm run typecheck)
