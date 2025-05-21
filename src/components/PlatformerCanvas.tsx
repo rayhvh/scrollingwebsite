@@ -6,6 +6,7 @@ const HEIGHT = 200;
 const GROUND_Y = 180;
 const MOVE_SPEED = 2;
 
+
 const PlatformerCanvas: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
