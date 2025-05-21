@@ -8,6 +8,7 @@
 - [x] Add second ladder and bottom path movement
 - [x] Fix second ladder downward movement and extend canvas
 - [x] Add third and fourth ladders to continue level
+- [x] Add flag pole at end of level with celebration animation
 - [x] Increase player movement speed
 - [x] Add additional staircases to extend the level
 - [ ] Expand info panels with more details
