@@ -15,3 +15,37 @@ This project describes a concept for a personal website about Raymond. The site 
 
 ## Purpose
 This website is intended to be a fun, gamified way to introduce Raymond. The scroll-based platformer keeps readers engaged as they learn more about him while guiding the character safely through the level.
+
+## Technology Stack
+
+The prototype uses the following tools:
+
+- **React** with **Vite** for a fast development environment.
+- **TypeScript** for type safety.
+- **PixiJS** to render the 2D canvas elements.
+- **GSAP ScrollTrigger** to sync scrolling with animations.
+- **Tailwind CSS** for utility‑first styling.
+
+These choices keep the code lightweight and easy to extend as the platformer grows more complex.
+
+## Getting Started
+
+1. Install the dependencies (requires Node.js):
+
+   ```bash
+   npm install
+   ```
+
+2. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+3. Build for production:
+
+   ```bash
+   npm run build
+   ```
+
+The generated site will appear in the `dist` folder.
