@@ -136,8 +136,11 @@ const PlatformerCanvas: React.FC = () => {
     let currentLadder: number | null = null;
     let currentGround = 0;
     let jumpCounter = 0;
+    let paused = false;
+    let resizeTimer: number | undefined;
 
     app.ticker.add(() => {
+      if (paused) return;
       if (mode === 'walking') {
         if (
           currentGround === groundYs.length - 1 &&
@@ -203,8 +206,11 @@ const PlatformerCanvas: React.FC = () => {
       }
     });
 
-    const resize = () => {
-      app.renderer.resize(window.innerWidth, window.innerHeight * HEIGHT_MULTIPLIER);
+    const resizeGame = () => {
+      app.renderer.resize(
+        window.innerWidth,
+        window.innerHeight * HEIGHT_MULTIPLIER
+      );
       drawScene();
       updateSpeeds();
       if (mode === 'walking') {
@@ -214,14 +220,30 @@ const PlatformerCanvas: React.FC = () => {
       } else if (mode === 'celebrating') {
         player.x = flagX + FLAG_WIDTH * 3;
         player.y =
-          groundYs[currentGround] - playerSize - Math.abs(Math.sin(jumpCounter)) * 20;
+          groundYs[currentGround] -
+          playerSize -
+          Math.abs(Math.sin(jumpCounter)) * 20;
       }
     };
 
-    window.addEventListener('resize', resize);
+    const handleResize = () => {
+      paused = true;
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+      }
+      resizeTimer = window.setTimeout(() => {
+        resizeGame();
+        paused = false;
+      }, 150);
+    };
+
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('resize', resize);
+      window.removeEventListener('resize', handleResize);
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+      }
       app.destroy(true, { children: true });
     };
   }, []);
